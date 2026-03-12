@@ -279,6 +279,557 @@ footer{background:var(--black);padding:60px 40px;text-align:center;border-top:1p
   </div>
 </div>
 
+
+<!-- REDE CREDENCIADA -->
+<section id="rede" style="background:#0D0D0D;padding:90px 40px;border-top:1px solid rgba(184,151,90,.12);">
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#111;color:#E8E0D0;font-family:'DM Sans',sans-serif;padding:40px 20px;}
+  .rc-section{max-width:1100px;margin:0 auto;}
+  .rc-title{font-family:'Cormorant Garamond',serif;font-size:2rem;color:#B8975A;text-align:center;margin-bottom:8px;letter-spacing:2px;}
+  .rc-sub{text-align:center;color:#888;font-size:.85rem;margin-bottom:32px;}
+
+  /* BUSCA */
+  .search-wrap{position:relative;margin-bottom:12px;}
+  .search-input{width:100%;padding:14px 48px 14px 18px;background:#1A1A1A;border:1px solid #333;border-radius:10px;color:#E8E0D0;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s;}
+  .search-input:focus{border-color:#B8975A;box-shadow:0 0 0 3px rgba(184,151,90,.1);}
+  .search-input::placeholder{color:#555;}
+  .search-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:#555;font-size:1.1rem;pointer-events:none;}
+  .search-results{display:none;background:#1A1A1A;border:1px solid #2A2A2A;border-radius:10px;margin-top:4px;max-height:300px;overflow-y:auto;}
+  .search-results.show{display:block;}
+  .sr-item{padding:10px 16px;border-bottom:1px solid #222;cursor:pointer;transition:.15s;}
+  .sr-item:last-child{border-bottom:none;}
+  .sr-item:hover{background:#222;}
+  .sr-name{font-size:.82rem;color:#E8E0D0;}
+  .sr-meta{font-size:.72rem;color:#888;margin-top:2px;}
+  .sr-badges{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+  .sr-badge{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:600;}
+  .sb-porto{background:rgba(26,74,138,.3);color:#7AABF0;border:1px solid rgba(122,171,240,.3);}
+  .sb-amil{background:rgba(74,42,138,.3);color:#A07AF0;border:1px solid rgba(160,122,240,.3);}
+  .sb-assim{background:rgba(26,106,58,.3);color:#6ACF8A;border:1px solid rgba(106,207,138,.3);}
+  .no-results{padding:16px;color:#666;text-align:center;font-size:.82rem;}
+
+  /* COMPARADOR */
+  .comparador{background:#161616;border:1px solid #2A2A2A;border-radius:12px;margin-bottom:28px;overflow:hidden;}
+  .comp-header{padding:14px 20px;background:#1A1A1A;border-bottom:1px solid #2A2A2A;font-size:.72rem;font-weight:700;letter-spacing:2px;color:#B8975A;text-transform:uppercase;}
+  .comp-table{width:100%;border-collapse:collapse;}
+  .comp-table th{padding:10px 14px;font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center;border-bottom:1px solid #2A2A2A;}
+  .comp-table th.th-hosp{text-align:left;color:#AAA;}
+  .comp-table th.th-porto{color:#7AABF0;}
+  .comp-table th.th-amil{color:#A07AF0;}
+  .comp-table th.th-assim{color:#6ACF8A;}
+  .comp-table td{padding:9px 14px;font-size:.78rem;border-bottom:1px solid #1E1E1E;text-align:center;vertical-align:middle;}
+  .comp-table td.td-name{text-align:left;color:#CCC;}
+  .comp-table td.td-zone{text-align:left;color:#666;font-size:.7rem;}
+  .comp-table tr:hover td{background:#1C1C1C;}
+  .comp-table tr:last-child td{border-bottom:none;}
+  .ci{font-size:1rem;}
+  .ci-yes{color:#4CAF50;}
+  .ci-no{color:#333;opacity:.4;}
+  .comp-sub{font-size:.65rem;color:#555;display:block;margin-top:1px;}
+  .comp-filter{display:flex;gap:8px;padding:12px 20px;background:#161616;flex-wrap:wrap;align-items:center;}
+  .comp-filter span{font-size:.72rem;color:#666;margin-right:4px;}
+  .cf-btn{padding:5px 12px;border-radius:20px;cursor:pointer;font-size:.72rem;border:1px solid #2A2A2A;color:#888;background:transparent;transition:.15s;font-family:'DM Sans',sans-serif;}
+  .cf-btn.active{border-color:#B8975A;color:#B8975A;background:rgba(184,151,90,.1);}
+  .comp-count{font-size:.72rem;color:#555;padding:0 20px 10px;text-align:right;}
+
+  /* OPERADORA TABS */
+  .op-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+  .op-tab{padding:10px 24px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;letter-spacing:1px;border:2px solid transparent;transition:.2s;}
+  .op-tab.porto{border-color:#1A4A8A;color:#7AABF0;background:rgba(26,74,138,.1);}
+  .op-tab.amil{border-color:#4A2A8A;color:#A07AF0;background:rgba(74,42,138,.1);}
+  .op-tab.assim{border-color:#1A6A3A;color:#6ACF8A;background:rgba(26,106,58,.1);}
+  .op-tab.porto.active{background:#1A4A8A;color:#fff;}
+  .op-tab.amil.active{background:#4A2A8A;color:#fff;}
+  .op-tab.assim.active{background:#1A6A3A;color:#fff;}
+  .op-panel{display:none;}
+  .op-panel.active{display:block;}
+  .plano-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+  .plano-tab{padding:7px 16px;border-radius:20px;cursor:pointer;font-size:.78rem;font-weight:500;border:1px solid #333;color:#AAA;background:#1A1A1A;transition:.2s;}
+  .plano-tab.active{border-color:#B8975A;color:#B8975A;background:rgba(184,151,90,.1);}
+  .plano-panel{display:none;}
+  .plano-panel.active{display:block;}
+
+  /* REDE CONTENT */
+  .rede-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:700px){.rede-grid{grid-template-columns:1fr;}}
+  .rede-card{background:#1A1A1A;border:1px solid #2A2A2A;border-radius:10px;padding:20px;}
+  .rede-card-title{font-size:.7rem;font-weight:700;letter-spacing:2px;color:#B8975A;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #2A2A2A;}
+  .regiao{margin-bottom:16px;}
+  .regiao-nome{font-size:.72rem;font-weight:700;color:#CCC;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .cidade{font-size:.7rem;color:#888;font-weight:600;margin:6px 0 2px;}
+  .hosp{font-size:.75rem;color:#C8C0B0;padding:3px 0 3px 12px;border-left:2px solid #2A2A2A;line-height:1.4;}
+  .hosp:hover{border-left-color:#B8975A;color:#E8E0D0;}
+  .tipo-badge{display:inline-block;font-size:.6rem;padding:1px 5px;border-radius:3px;margin-left:4px;background:#2A2A2A;color:#888;vertical-align:middle;}
+
+</style>
+<div class="rc-section">
+<div class="rc-section">
+  <div class="rc-title">REDE CREDENCIADA</div>
+  <div class="rc-sub">Busque um hospital ou laboratório e veja em quais planos ele é atendido</div>
+
+  <!-- BUSCA -->
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" type="text" placeholder="Buscar hospital, laboratório ou cidade... ex: Icaraí, Bronstein, São Gonçalo">
+    <span class="search-icon">🔍</span>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+  <!-- COMPARADOR -->
+  <div class="comparador">
+    <div class="comp-header">📊 Comparador de Cobertura por Unidade</div>
+    <div class="comp-filter">
+      <span>Filtrar:</span>
+      <button class="cf-btn active" onclick="filterComp('todos',this)">Todos</button>
+      <button class="cf-btn" onclick="filterComp('porto',this)">Porto Saúde</button>
+      <button class="cf-btn" onclick="filterComp('amil',this)">Amil</button>
+      <button class="cf-btn" onclick="filterComp('assim',this)">Assim Saúde</button>
+      <button class="cf-btn" onclick="filterComp('multi',this)">Em 2+ planos</button>
+    </div>
+    <div class="comp-count" id="compCount"></div>
+    <div style="overflow-x:auto;">
+    <table class="comp-table">
+      <thead><tr>
+        <th class="th-hosp" style="min-width:220px;">Hospital / Laboratório</th>
+        <th class="th-hosp" style="min-width:100px;">Região</th>
+        <th class="th-porto">Porto<br><span style="font-size:.6rem;font-weight:400;color:#5580B0;">Bronze Pro</span></th>
+        <th class="th-amil">Amil<br><span style="font-size:.6rem;font-weight:400;color:#7050A0;">Bronze QC</span></th>
+        <th class="th-amil">Amil<br><span style="font-size:.6rem;font-weight:400;color:#7050A0;">Bronze Mais</span></th>
+        <th class="th-assim">Assim<br><span style="font-size:.6rem;font-weight:400;color:#3A8050;">A20</span></th>
+      </tr></thead>
+      <tbody id="compBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- OPERADORA TABS -->
+  <div class="op-tabs">
+    <div class="op-tab porto active" onclick="showOp('porto')">PORTO SAÚDE</div>
+    <div class="op-tab amil" onclick="showOp('amil')">AMIL</div>
+    <div class="op-tab assim" onclick="showOp('assim')">ASSIM SAÚDE</div>
+  </div>
+
+  <!-- PORTO -->
+  <div class="op-panel active" id="op-porto">
+    <div class="plano-tabs">
+      <div class="plano-tab active" onclick="showPlano('porto','bronzepro',event)">Bronze Pro QC</div>
+      <div class="plano-tab" onclick="showPlano('porto','portomed',event)">Portomed BT QC</div>
+    </div>
+    <div class="plano-panel active" id="porto-bronzepro">
+      <div class="rede-grid">
+        <div class="rede-card">
+          <div class="rede-card-title">🏥 Hospitais</div>
+          <div class="regiao"><div class="regiao-nome">Zona Norte — RJ</div>
+            <div class="hosp">AmericanCor Hospital <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Casa Evangélico <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Casa Italiano <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Clínica Grajaú <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital de Irajá <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Ilha do Governador <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Procor <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Semiu <span class="tipo-badge">H/PS/PSI</span></div>
+            <div class="hosp">Prontobaby Méier Criança 24h <span class="tipo-badge">H/PS</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Sul — RJ</div>
+            <div class="hosp">AMIU Memorial Infantil Botafogo <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Clínica da Gávea <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Cob Centro Oftalmológico de Botafogo <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Casa Rio Laranjeiras <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital e Maternidade Santa Bárbara <span class="tipo-badge">H/M/PS</span></div>
+            <div class="hosp">Hospital Quali Ipanema <span class="tipo-badge">H/PS</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Oeste — RJ</div>
+            <div class="hosp">Clínica Pediátrica da Barra <span class="tipo-badge">PSI</span></div>
+            <div class="hosp">HDC Hospital Di Camp <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Casa São Bernardo <span class="tipo-badge">H/PS/PSI</span></div>
+            <div class="hosp">Hospital da Mulher — Jacarepaguá <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital São Matheus <span class="tipo-badge">H/M/PS/PSI</span></div>
+            <div class="hosp">HSL Hospital São Lourenço <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Oftalmocasa Rede Hospital Casa <span class="tipo-badge">H/PS</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Centro — RJ</div>
+            <div class="hosp">Hospital Casa de Portugal <span class="tipo-badge">H/PS</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Região Metropolitana</div>
+            <div class="cidade">Duque de Caxias</div>
+            <div class="hosp">Hospital Daniel Lipp <span class="tipo-badge">H/M/PS/PSI</span></div>
+            <div class="cidade">Niterói</div>
+            <div class="hosp">CHN Complexo Hospitalar — Unidades I, II, III, IV e V <span class="tipo-badge">H/M/PS/PSI</span></div>
+            <div class="hosp">Hospital de Olhos Niterói — 4 unidades <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Santa Martha <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Neotin — São Francisco Hospital & Maternidade <span class="tipo-badge">M/PS</span></div>
+            <div class="cidade">Nova Iguaçu</div>
+            <div class="hosp">Emcor Hospital do Coração <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Prontonil <span class="tipo-badge">H/PS/PSI</span></div>
+            <div class="cidade">São Gonçalo</div>
+            <div class="hosp">HCSG Hospital e Clínica São Gonçalo <span class="tipo-badge">H/M/PS/PSI</span></div>
+          </div>
+        </div>
+        <div class="rede-card">
+          <div class="rede-card-title">🔬 Laboratórios</div>
+          <div class="regiao"><div class="regiao-nome">Zona Norte</div>
+            <div class="hosp">Eliel Figueiredo — Bonsucesso, Cachambi, Ilha do Governador, Irajá, Largo do Bicão, Madureira, Méier, Penha, Tijuca</div>
+            <div class="hosp">LAFE — Del Castilho, Guadalupe, Ilha do Governador, Tijuca, Vila da Penha I</div>
+            <div class="hosp">Labi Exames — Bonsucesso · Lamina — Tijuca · Medscan · BRANNE & LAPAC — Tijuca</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Sul</div>
+            <div class="hosp">Eliel Figueiredo — Copacabana</div>
+            <div class="hosp">LAFE — Botafogo, Copacabana I e II, Gávea, Ipanema, Laranjeiras</div>
+            <div class="hosp">Labi Exames — Botafogo, Copacabana · IRM Ressonância — Humaitá · Lab. Braga Filho · Neurolife</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Oeste</div>
+            <div class="hosp">Eliel Figueiredo — Barra, Bangu, Campo Grande, Freguesia, Praça Seca, Recreio, Santa Cruz, Taquara</div>
+            <div class="hosp">LAFE — Barra Life, Barra Shopping · Labi Exames — Taquara · IRM — Campo Grande · Lamina — Barra</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Centro</div>
+            <div class="hosp">Eliel Figueiredo — Centro, São Cristóvão · LAFE — Fátima, Ouvidor, São Cristóvão · Lamina · DLC · BRANNE & LAPAC</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Niterói</div>
+            <div class="hosp">Lab. Bittar — Centro, Icaraí (3 un.), Itaipu, São Francisco</div>
+            <div class="hosp">Lab. Dom Bosco — Centro, Icaraí II, Itaipu, Jardim Icaraí, Pendotiba</div>
+            <div class="hosp">LAFE — Icaraí · MediLabs</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">São Gonçalo</div>
+            <div class="hosp">Dom Bosco — Alcântara (2 un.), Centro, Zé Garoto · LAFE — Alcântara · Clínica Susga</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Nova Iguaçu</div>
+            <div class="hosp">LAFE — Nova Iguaçu (4 un.) · Cemam · Dimagem · Lab. José Luiz Ribeiro (3 un.)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="plano-panel" id="porto-portomed">
+      <div style="padding:24px;background:#1A1A1A;border-radius:10px;border:1px solid #2A2A2A;color:#888;font-size:.85rem;text-align:center;">
+        ⚠️ Rede credenciada Portomed Barra da Tijuca — aguardando PDF da operadora
+      </div>
+    </div>
+  </div>
+
+  <!-- AMIL -->
+  <div class="op-panel" id="op-amil">
+    <div class="plano-tabs">
+      <div class="plano-tab active" onclick="showPlano('amil','bronze',event)">Bronze QC</div>
+      <div class="plano-tab" onclick="showPlano('amil','bronzemais',event)">Bronze Mais QC</div>
+    </div>
+    <div class="plano-panel active" id="amil-bronze">
+      <div class="rede-grid">
+        <div class="rede-card">
+          <div class="rede-card-title">🏥 Hospitais — Bronze</div>
+          <div class="regiao"><div class="regiao-nome">Zona Norte — RJ</div>
+            <div class="hosp">AmericanCor Hospital <span class="tipo-badge">H</span></div>
+            <div class="hosp">Hospital da Criança — Grupo Prontobaby <span class="tipo-badge">H/PSI</span></div>
+            <div class="hosp">Hospital Ilha do Governador <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Pan-Americano <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital Pasteur — Meier <span class="tipo-badge">H/M/PS/PSI</span></div>
+            <div class="hosp">TijuTrauma Clínica & Hospital <span class="tipo-badge">H/PS</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Sul — RJ</div>
+            <div class="hosp">AMIU Memorial Infantil Botafogo <span class="tipo-badge">H/PSI</span></div>
+            <div class="hosp">CPL Centro Pediátrico Lagoa <span class="tipo-badge">H/PSI</span></div>
+            <div class="hosp">CSPM Casa de Saúde Pinheiro Machado <span class="tipo-badge">H</span></div>
+            <div class="hosp">Santa Lucia Hospital e Maternidade <span class="tipo-badge">H</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Oeste — RJ</div>
+            <div class="hosp">Amil Espaço Saúde — Campo Grande <span class="tipo-badge">PS/PSI</span></div>
+            <div class="hosp">Cemeru Grupo de Saúde <span class="tipo-badge">H/PS/PSI</span></div>
+            <div class="hosp">Clínica Pediátrica da Barra <span class="tipo-badge">H/PSI</span></div>
+            <div class="hosp">CSNSC Casa de Saúde Nossa Senhora do Carmo <span class="tipo-badge">H/M/PS/PSI</span></div>
+            <div class="hosp">Hospital Casa São Bernardo <span class="tipo-badge">H</span></div>
+            <div class="hosp">Hospital de Clínicas de Jacarepaguá <span class="tipo-badge">H/PS</span></div>
+            <div class="hosp">Hospital de Clínicas Santa Cruz <span class="tipo-badge">H</span></div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Região Metropolitana</div>
+            <div class="cidade">Duque de Caxias</div><div class="hosp">Hospital de Clínicas Mario Lioni <span class="tipo-badge">H/PS/PSI</span></div>
+            <div class="cidade">Niterói</div>
+            <div class="hosp">Casa de Saúde Nossa Senhora Auxiliadora · HGI Hospital Geral do Ingá · Hospital de Clínicas Alameda · Hospital Icaraí · Hospital Santa Martha · Neotin — São Francisco · Pires de Mello Otorrino (Fonseca e Icaraí)</div>
+            <div class="cidade">Nova Iguaçu</div>
+            <div class="hosp">Amil Espaço Saúde · Emcor Hospital do Coração · Hospital Prontonil</div>
+            <div class="cidade">São Gonçalo</div>
+            <div class="hosp">HCSG Hospital e Clínica São Gonçalo · Samcordis Hospital do Coração</div>
+          </div>
+        </div>
+        <div class="rede-card">
+          <div class="rede-card-title">🔬 Laboratórios — Bronze</div>
+          <div class="regiao"><div class="regiao-nome">Zona Norte</div>
+            <div class="hosp">Bronstein — Bonsucesso, Cachambi, Cascadura, Del Castilho, Grajaú, Ilha do Governador (2 un.), Irajá, Jardim América, Largo do Bicão, Mega Meier, Mega Tijuca, Penha II, Tijuca Shopping 45, Vila Isabel</div>
+            <div class="hosp">Eliel Figueiredo — Bonsucesso, Cachambi, Ilha do Governador, Irajá, Largo do Bicão, Madureira, Méier, Penha, Tijuca · Oto Grupo — Tijuca</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Sul</div>
+            <div class="hosp">Bronstein — Botafogo II, Catete, Copacabana II, Ipanema, Leblon, Madureira II e Mercadão, Mega Copacabana, Mega Madureira</div>
+            <div class="hosp">Eliel Figueiredo — Copacabana · Clínica Sinapse · Oto Grupo — Ipanema</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Oeste</div>
+            <div class="hosp">Bronstein — Bangu, Barra (Downtown e Plaza), Campo Grande (3 un.), Curicica, Freguesia (2 un.), Praça Seca, Cidade de Deus, Recreio, Santa Cruz, São Cristóvão, Taquara, Vila Valqueire</div>
+            <div class="hosp">Eliel Figueiredo — Barra, Bangu, Campo Grande (2 un.), Freguesia, Recreio, Santa Cruz, Taquara · Oto Grupo — Madureira, Barra, Downtown</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Centro</div>
+            <div class="hosp">Bronstein — Centro I, Ouvidor, Rio Comprido · Eliel Figueiredo — Centro, São Cristóvão · Sensorium</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Niterói / Nova Iguaçu</div>
+            <div class="hosp">Bronstein — Icaraí · Jopes · Bronstein — Nova Iguaçu</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="plano-panel" id="amil-bronzemais">
+      <div class="rede-grid">
+        <div class="rede-card">
+          <div class="rede-card-title">🏥 Hospitais — Bronze Mais</div>
+          <div class="regiao"><div class="regiao-nome">Inclui tudo do Bronze, mais:</div>
+            <div class="hosp">Rio Day Hospital (Zona Norte) · Centro Avançado de Oftalmologia · Hospital Ipanema Care (Zona Sul)</div>
+            <div class="hosp">Clinipam · Hospital da Mulher GNDI — Jacarepaguá · Hospital Geral de Santa Cruz — Cemeru (Zona Oeste)</div>
+            <div class="hosp">Hospital São Lucas Grupo Assim — Niterói · ION Instituto de Oftalmologia · Oftalmoclínica Icaraí · Placi Cuidados Extensivos</div>
+            <div class="hosp">Itaguaí · Nilópolis · Paracambi · Petrópolis · Rio Bonito · São João de Meriti · Teresópolis · Mesquita</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Norte Fluminense (exclusivo Bronze Mais)</div>
+            <div class="hosp">Campos dos Goytacazes — 5 hospitais · Macaé — Hospital São João Batista</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Sul Fluminense</div>
+            <div class="hosp">Barra do Piraí · Barra Mansa · Piraí · Resende · Volta Redonda</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Baixada Litorânea</div>
+            <div class="hosp">Araruama · Cabo Frio · Rio das Ostras</div>
+          </div>
+        </div>
+        <div class="rede-card">
+          <div class="rede-card-title">🔬 Laboratórios — Bronze Mais</div>
+          <div class="regiao"><div class="regiao-nome">Toda rede Bronze, mais Labs A+ (Grupo Fleury)</div>
+            <div class="hosp">Zona Norte: 14 unidades A+ incluindo Bonsucesso, Tijuca, Vila Isabel, Del Castilho, Penha</div>
+            <div class="hosp">Zona Sul: Barão de Ipanema, Catete, Flamengo, Largo do Machado, Posto 6 · IRM Ressonância — Humaitá</div>
+            <div class="hosp">Zona Oeste: Barra Life, Bangu, Barra das Américas, Campo Grande (2 un.), Recreio, Taquara (2 un.)</div>
+            <div class="hosp">Centro: Carioca, Debret</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Niterói — Labs A+</div>
+            <div class="hosp">Santa Rosa, Amaral Peixoto, Otávio Carneiro, Piratininga, Sete de Setembro, Tavares de Macedo, XV Novembro · MR Multi-Imagem · Neurofisiologia Clínica · Otorrinos Reunidos</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Interior / Litoral</div>
+            <div class="hosp">Campos, Macaé, Barra Mansa, Resende, Volta Redonda, Araruama, Cabo Frio, Saquarema, Petrópolis, Teresópolis</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSIM -->
+  <div class="op-panel" id="op-assim">
+    <div class="plano-tabs">
+      <div class="plano-tab active" onclick="showPlano('assim','a20',event)">A20 QC</div>
+    </div>
+    <div class="plano-panel active" id="assim-a20">
+      <div class="rede-grid">
+        <div class="rede-card">
+          <div class="rede-card-title">🏥 Hospitais — A20</div>
+          <div class="regiao"><div class="regiao-nome">Zona Norte — RJ</div>
+            <div class="hosp">Centro Médico Grupo Assim Saúde — Tijuca</div>
+            <div class="hosp">Clínica de Repouso Santa Alice</div>
+            <div class="hosp">Hospital da Criança — Grupo Prontobaby</div>
+            <div class="hosp">Hospital de Clínicas Engenho de Dentro — Grupo Memorial</div>
+            <div class="hosp">Hospital Grupo Assim Saúde — Meier</div>
+            <div class="hosp">Hospital Memorial Fuad Chidid — Grupo Memorial</div>
+            <div class="hosp">Hospital São Victor</div>
+            <div class="hosp">Septo Otorrinolaringologia — Tijuca 24h</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Sul — RJ</div>
+            <div class="hosp">Hospital Ênio Serra</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Zona Oeste — RJ</div>
+            <div class="hosp">Centro Médico Memorial Campo Grande · Centro Médico Memorial Santa Cruz</div>
+            <div class="hosp">CHAJ Centro Hospitalar Amep — Jacarepaguá</div>
+            <div class="hosp">Clínica Pediátrica da Barra · Hospital São Matheus</div>
+            <div class="hosp">Instituto de Olhos da Tijuca — Americas Oftalmocenter</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Centro — RJ</div>
+            <div class="hosp">Hospital Assim Medical Doutor Aloan</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Região Metropolitana</div>
+            <div class="cidade">Duque de Caxias</div><div class="hosp">Hospital Daniel Lipp</div>
+            <div class="cidade">Niterói</div><div class="hosp">Hospital São Lucas Grupo Assim Saúde</div>
+            <div class="cidade">Nova Iguaçu</div><div class="hosp">Hospital Prontonil</div>
+            <div class="cidade">São Gonçalo</div><div class="hosp">Hospital Memorial São Lucas</div>
+          </div>
+        </div>
+        <div class="rede-card">
+          <div class="rede-card-title">🔬 Laboratórios — A20</div>
+          <div class="regiao"><div class="regiao-nome">RioLabor Medicina Diagnóstica</div>
+            <div class="hosp">Zona Norte: Matriz (Centro de Diagnósticos), Meier, Tijuca I, Vila da Penha</div>
+            <div class="hosp">Zona Sul: Copacabana, Madureira I e II</div>
+            <div class="hosp">Zona Oeste: Freguesia 24h, Taquara 24h, Bangu (2 un.), Campo Grande, Taquara</div>
+            <div class="hosp">Centro: Centro, Centro II</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Laboratório Blessing</div>
+            <div class="hosp">Niterói — Central Técnica, Largo da Batalha</div>
+            <div class="hosp">Duque de Caxias · Maricá · Petrópolis · São Gonçalo · Praça XV</div>
+          </div>
+          <div class="regiao"><div class="regiao-nome">Região Metropolitana</div>
+            <div class="hosp">Belford Roxo · Duque de Caxias · Nilópolis · Nova Iguaçu · São João de Meriti</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<script>
+
+// ===================== DADOS DO COMPARADOR =====================
+const unidades = [
+  // HOSPITAIS
+  {n:"AmericanCor Hospital",             r:"Zona Norte — RJ",    porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital da Criança (Prontobaby)", r:"Zona Norte — RJ",    porto:0, amil_b:1, amil_bm:1, assim:1},
+  {n:"Hospital Ilha do Governador",      r:"Zona Norte — RJ",    porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Pan-Americano",           r:"Zona Norte — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Pasteur — Meier",         r:"Zona Norte — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"TijuTrauma Clínica & Hospital",    r:"Zona Norte — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Casa Evangélico",         r:"Zona Norte — RJ",    porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital Semiu",                   r:"Zona Norte — RJ",    porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Prontobaby Méier Criança 24h",     r:"Zona Norte — RJ",    porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Rio Day Hospital",                 r:"Zona Norte — RJ",    porto:0, amil_b:0, amil_bm:1, assim:0},
+  {n:"Hosp. Clínicas Engenho de Dentro", r:"Zona Norte — RJ",    porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Hospital Grupo Assim — Meier",     r:"Zona Norte — RJ",    porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Hospital Memorial Fuad Chidid",    r:"Zona Norte — RJ",    porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Hospital São Victor",              r:"Zona Norte — RJ",    porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"AMIU Memorial Infantil Botafogo",  r:"Zona Sul — RJ",      porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Santa Lucia Hospital e Maternidade",r:"Zona Sul — RJ",     porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"CPL Centro Pediátrico Lagoa",      r:"Zona Sul — RJ",      porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"CSPM Casa de Saúde Pinheiro Machado",r:"Zona Sul — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Ipanema Care",            r:"Zona Sul — RJ",      porto:0, amil_b:0, amil_bm:1, assim:0},
+  {n:"Clínica da Gávea",                 r:"Zona Sul — RJ",      porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital e Maternidade Santa Bárbara",r:"Zona Sul — RJ",   porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital Quali Ipanema",           r:"Zona Sul — RJ",      porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital Ênio Serra",              r:"Zona Sul — RJ",      porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Clínica Pediátrica da Barra",      r:"Zona Oeste — RJ",    porto:1, amil_b:1, amil_bm:1, assim:1},
+  {n:"Hospital Casa São Bernardo",       r:"Zona Oeste — RJ",    porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital de Clínicas de Jacarepaguá",r:"Zona Oeste — RJ",  porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital de Clínicas Santa Cruz",  r:"Zona Oeste — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Cemeru Grupo de Saúde",            r:"Zona Oeste — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"CSNSC Casa de Saúde N.S. do Carmo",r:"Zona Oeste — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital da Mulher GNDI — Jacarepaguá",r:"Zona Oeste — RJ",porto:1, amil_b:0, amil_bm:1, assim:0},
+  {n:"Hospital São Matheus",             r:"Zona Oeste — RJ",    porto:1, amil_b:0, amil_bm:0, assim:1},
+  {n:"HDC Hospital Di Camp",             r:"Zona Oeste — RJ",    porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"HSL Hospital São Lourenço",        r:"Zona Oeste — RJ",    porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Amil Espaço Saúde — Campo Grande", r:"Zona Oeste — RJ",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"CHAJ Centro Hospitalar — Jacarepaguá",r:"Zona Oeste — RJ", porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Hospital Casa de Portugal",        r:"Centro — RJ",        porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital Assim Medical Dr. Aloan", r:"Centro — RJ",        porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Hospital de Clínicas Mario Lioni", r:"Duque de Caxias",    porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Daniel Lipp",             r:"Duque de Caxias",    porto:1, amil_b:0, amil_bm:0, assim:1},
+  {n:"CHN Complexo Hospitalar de Niterói",r:"Niterói",           porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital de Olhos Niterói",        r:"Niterói",            porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Hospital Icaraí",                  r:"Niterói",            porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Santa Martha (Niterói)",  r:"Niterói",            porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Neotin — São Francisco H&M",       r:"Niterói",            porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"HGI Hospital Geral do Ingá",       r:"Niterói",            porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital de Clínicas Alameda",     r:"Niterói",            porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital São Lucas Grupo Assim",   r:"Niterói",            porto:0, amil_b:0, amil_bm:1, assim:1},
+  {n:"Emcor Hospital do Coração",        r:"Nova Iguaçu",        porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Prontonil",               r:"Nova Iguaçu",        porto:1, amil_b:1, amil_bm:1, assim:1},
+  {n:"Amil Espaço Saúde — Nova Iguaçu",  r:"Nova Iguaçu",        porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"HCSG Hospital e Clínica São Gonçalo",r:"São Gonçalo",      porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Samcordis Hospital do Coração",    r:"São Gonçalo",        porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Hospital Memorial São Lucas",      r:"São Gonçalo",        porto:0, amil_b:0, amil_bm:0, assim:1},
+  // LABORATÓRIOS
+  {n:"Bronstein Medicina Diagnóstica",   r:"Rio de Janeiro",     porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Eliel Figueiredo Lab. e Imagem",   r:"Rio de Janeiro",     porto:1, amil_b:1, amil_bm:1, assim:0},
+  {n:"Labs A+ (Grupo Fleury)",           r:"Rio de Janeiro",     porto:0, amil_b:0, amil_bm:1, assim:0},
+  {n:"LAFE Laboratório",                 r:"Rio de Janeiro",     porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Labi Exames",                      r:"Rio de Janeiro",     porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Lamina Lab. de Exames e Imagem",   r:"Rio de Janeiro",     porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"RioLabor Medicina Diagnóstica",    r:"Rio de Janeiro",     porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Laboratório Blessing",             r:"Niterói / Metr.",    porto:0, amil_b:0, amil_bm:0, assim:1},
+  {n:"Laboratório Bittar",               r:"Niterói",            porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Laboratório Dom Bosco",            r:"Niterói / S.Gonçalo",porto:1, amil_b:0, amil_bm:0, assim:0},
+  {n:"Bronstein — Icaraí (Niterói)",     r:"Niterói",            porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Labs A+ — Niterói",                r:"Niterói",            porto:0, amil_b:0, amil_bm:1, assim:0},
+  {n:"Jopes Prestação de Serviços Médicos",r:"Niterói",          porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"IRM Ressonância Magnética",        r:"RJ / Niterói",       porto:1, amil_b:0, amil_bm:1, assim:0},
+  {n:"Oto Grupo (Otorrino)",             r:"Rio de Janeiro",     porto:0, amil_b:1, amil_bm:1, assim:0},
+  {n:"Sensorium",                        r:"Centro — RJ",        porto:0, amil_b:1, amil_bm:1, assim:0},
+];
+
+let currentFilter = 'todos';
+let searchTerm = '';
+
+function yes(v){ return v ? '<span class="ci ci-yes" title="Atendido">✔</span>' : '<span class="ci ci-no" title="Não atendido">✕</span>'; }
+
+function renderComp(){
+  let rows = unidades.filter(u => {
+    const matchSearch = !searchTerm || u.n.toLowerCase().includes(searchTerm) || u.r.toLowerCase().includes(searchTerm);
+    let matchFilter = true;
+    if(currentFilter==='porto') matchFilter = u.porto;
+    if(currentFilter==='amil')  matchFilter = u.amil_b || u.amil_bm;
+    if(currentFilter==='assim') matchFilter = u.assim;
+    if(currentFilter==='multi') matchFilter = (u.porto+u.amil_b+u.amil_bm+u.assim) >= 2;
+    return matchSearch && matchFilter;
+  });
+  document.getElementById('compCount').textContent = rows.length + ' unidade(s) encontrada(s)';
+  document.getElementById('compBody').innerHTML = rows.map(u =>
+    `<tr>
+      <td class="td-name">${u.n}</td>
+      <td class="td-zone">${u.r}</td>
+      <td>${yes(u.porto)}</td>
+      <td>${yes(u.amil_b)}</td>
+      <td>${yes(u.amil_bm)}</td>
+      <td>${yes(u.assim)}</td>
+    </tr>`
+  ).join('');
+}
+
+function filterComp(f, btn){
+  currentFilter = f;
+  document.querySelectorAll('.cf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderComp();
+}
+
+// BUSCA
+const allNames = unidades.map(u => ({...u}));
+document.getElementById('searchInput').addEventListener('input', function(){
+  const q = this.value.toLowerCase().trim();
+  searchTerm = q;
+  renderComp();
+  const res = document.getElementById('searchResults');
+  if(!q){ res.classList.remove('show'); return; }
+  const matches = allNames.filter(u => u.n.toLowerCase().includes(q) || u.r.toLowerCase().includes(q));
+  if(!matches.length){ res.innerHTML='<div class="no-results">Nenhuma unidade encontrada</div>'; res.classList.add('show'); return; }
+  res.innerHTML = matches.slice(0,8).map(u => {
+    const badges = [];
+    if(u.porto) badges.push('<span class="sr-badge sb-porto">Porto Bronze Pro</span>');
+    if(u.amil_b) badges.push('<span class="sr-badge sb-amil">Amil Bronze QC</span>');
+    if(u.amil_bm) badges.push('<span class="sr-badge sb-amil">Amil Bronze Mais</span>');
+    if(u.assim) badges.push('<span class="sr-badge sb-assim">Assim A20</span>');
+    return `<div class="sr-item">
+      <div class="sr-name">${u.n}</div>
+      <div class="sr-meta">${u.r}</div>
+      <div class="sr-badges">${badges.join('')}</div>
+    </div>`;
+  }).join('');
+  res.classList.add('show');
+});
+document.addEventListener('click', e => {
+  if(!e.target.closest('.search-wrap')) document.getElementById('searchResults').classList.remove('show');
+});
+
+function showOp(op){
+  document.querySelectorAll('.op-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.op-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.op-tab.'+op).classList.add('active');
+  document.getElementById('op-'+op).classList.add('active');
+}
+function showPlano(op,plano,e){
+  const panel = document.getElementById('op-'+op);
+  panel.querySelectorAll('.plano-tab').forEach(t=>t.classList.remove('active'));
+  panel.querySelectorAll('.plano-panel').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(op+'-'+plano).classList.add('active');
+}
+
+renderComp();
+
+</script>
+
 <footer>
   <div class="fl">GW9</div>
   <div class="fs">Saúde · Corretora de Planos</div>
