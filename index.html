@@ -97,6 +97,9 @@ footer{background:var(--black);padding:60px 40px;text-align:center;border-top:1p
 @keyframes exp{from{width:0}to{width:60px}}
 @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
 @media(max-width:768px){.ii,.og{grid-template-columns:1fr;gap:40px;}.hs{gap:30px;}.hero,.intro,.ops{padding:60px 20px;}.tbl{padding:40px 20px 60px;}footer{padding:40px 20px;}.pv{display:none;}.snav{padding:12px 20px;}}
+
+.hn-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:1px solid rgba(184,151,90,.35);border-radius:4px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.12em;text-decoration:none;background:rgba(184,151,90,.06);transition:.2s;}
+.hn-btn:hover{background:rgba(184,151,90,.15);border-color:var(--gold);color:var(--w);}
 </style>
 </head>
 <body>
@@ -119,7 +122,14 @@ footer{background:var(--black);padding:60px 40px;text-align:center;border-top:1p
     <div class="st"><span class="v">3</span><span class="l">Operadoras</span></div>
     <div class="st"><span class="v">7</span><span class="l">Planos</span></div>
   </div>
-  <div class="sh">Ver proposta</div>
+  <div class="hero-nav" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px;animation:fi .9s ease 2s both;">
+    <a href="#ops" class="hn-btn">🏢 Operadoras</a>
+    <a href="#tabelas" class="hn-btn">📋 Tabelas de Preço</a>
+    <a href="#rede" class="hn-btn">🏥 Rede Credenciada</a>
+    <a href="#simulador" class="hn-btn">🧮 Simulador</a>
+    <a href="#comparador" class="hn-btn">📊 Comparador</a>
+  </div>
+  <div class="sh">Explorar proposta</div>
 </section>
 
 <section class="intro">
@@ -137,7 +147,7 @@ footer{background:var(--black);padding:60px 40px;text-align:center;border-top:1p
   </div>
 </section>
 
-<section class="ops">
+<section class="ops" id="ops">
   <div class="oi">
     <div class="oh">
       <div class="oey">As Operadoras</div>
@@ -166,7 +176,7 @@ footer{background:var(--black);padding:60px 40px;text-align:center;border-top:1p
   </div>
 </section>
 
-<div class="tbl">
+<div class="tbl" id="tabelas">
   <div class="sep"><span>Porto Saúde — Tabelas de Preços</span></div>
 
   <!-- PORTO: tabela unificada com 3 colunas -->
@@ -375,33 +385,6 @@ footer{background:var(--black);padding:60px 40px;text-align:center;border-top:1p
     <input class="search-input" id="searchInput" type="text" placeholder="Buscar hospital, laboratório ou cidade... ex: Icaraí, Bronstein, São Gonçalo">
     <span class="search-icon">🔍</span>
     <div class="search-results" id="searchResults"></div>
-  </div>
-
-  <!-- COMPARADOR -->
-  <div class="comparador">
-    <div class="comp-header">📊 Comparador de Cobertura por Unidade</div>
-    <div class="comp-filter">
-      <span>Filtrar:</span>
-      <button class="cf-btn active" onclick="filterComp('todos',this)">Todos</button>
-      <button class="cf-btn" onclick="filterComp('porto',this)">Porto Saúde</button>
-      <button class="cf-btn" onclick="filterComp('amil',this)">Amil</button>
-      <button class="cf-btn" onclick="filterComp('assim',this)">Assim Saúde</button>
-      <button class="cf-btn" onclick="filterComp('multi',this)">Em 2+ planos</button>
-    </div>
-    <div class="comp-count" id="compCount"></div>
-    <div style="overflow-x:auto;">
-    <table class="comp-table">
-      <thead><tr>
-        <th class="th-hosp" style="min-width:220px;">Hospital / Laboratório</th>
-        <th class="th-hosp" style="min-width:100px;">Região</th>
-        <th class="th-porto">Porto<br><span style="font-size:.6rem;font-weight:400;color:#5580B0;">Bronze Pro</span></th>
-        <th class="th-amil">Amil<br><span style="font-size:.6rem;font-weight:400;color:#7050A0;">Bronze QC</span></th>
-        <th class="th-amil">Amil<br><span style="font-size:.6rem;font-weight:400;color:#7050A0;">Bronze Mais</span></th>
-        <th class="th-assim">Assim<br><span style="font-size:.6rem;font-weight:400;color:#3A8050;">A20</span></th>
-      </tr></thead>
-      <tbody id="compBody"></tbody>
-    </table>
-    </div>
   </div>
 
   <!-- OPERADORA TABS -->
